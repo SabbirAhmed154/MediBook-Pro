@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <h1>Welcome, {{ request.user.username }}</h1>
+
+    <hr>
+
+    {% if is_doctor %}
+
+        <h2>Doctor Dashboard</h2>
+
+        <p>
+            <a href="{% url 'doctor_appointments' %}">
+                View Doctor Appointments
+            </a>
+        </p>
+
+    {% else %}
+
+        <h2>Patient Dashboard</h2>
+
+        <p>
+            <a href="{% url 'my_appointments' %}">
+                My Appointments
+            </a>
+        </p>
+
+        <p>
+            <a href="{% url 'book_appointment' %}">
+                Book Appointment
+            </a>
+        </p>
+
+    {% endif %}
+
+    <hr>
+
+    <form
+        method="post"
+        action="{% url 'logout' %}"
+    >
+        {% csrf_token %}
+
+        <button type="submit">
+            Logout
+        </button>
+    </form>
+
+</body>
+
+</html>

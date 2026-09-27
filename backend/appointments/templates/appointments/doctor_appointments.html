@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Doctor Appointments</title>
+</head>
+
+<body>
+
+    <h1>Doctor Appointments</h1>
+
+    {% if appointments %}
+
+        {% for appointment in appointments %}
+
+            <h3>
+                Patient: {{ appointment.patient.username }}
+            </h3>
+
+            <p>
+                Date: {{ appointment.appointment_date }}
+            </p>
+
+            <p>
+                Time: {{ appointment.appointment_time }}
+            </p>
+
+            <p>
+                Reason: {{ appointment.reason }}
+            </p>
+
+            <p>
+                Status: {{ appointment.status }}
+            </p>
+
+
+            {% if appointment.status == "PENDING" %}
+
+                <form
+                    method="post"
+                    action="{% url 'confirm_appointment' appointment.id %}"
+                    style="display: inline;"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit">
+                        Accept Appointment
+                    </button>
+
+                </form>
+
+
+                <form
+                    method="post"
+                    action="{% url 'reject_appointment' appointment.id %}"
+                    style="display: inline;"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit">
+                        Reject Appointment
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+
+            {% if appointment.status == "CONFIRMED" %}
+
+                <form
+                    method="post"
+                    action="{% url 'complete_appointment' appointment.id %}"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit">
+                        Complete Appointment
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+
+            {% if appointment.status == "COMPLETED" %}
+
+                <p>
+                    Appointment completed.
+                </p>
+
+            {% endif %}
+
+
+            {% if appointment.status == "CANCELLED" %}
+
+                <p>
+                    Appointment cancelled/rejected.
+                </p>
+
+            {% endif %}
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No appointments found.</p>
+
+    {% endif %}
+
+</body>
+
+</html>

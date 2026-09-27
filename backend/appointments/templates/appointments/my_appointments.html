@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Appointments</title>
+</head>
+
+<body>
+
+    <h1>My Appointments</h1>
+
+    <a href="{% url 'book_appointment' %}">
+        Book New Appointment
+    </a>
+
+    |
+
+    <form
+        method="post"
+        action="{% url 'logout' %}"
+        style="display:inline;"
+    >
+        {% csrf_token %}
+
+        <button type="submit">
+            Logout
+        </button>
+    </form>
+
+    <hr>
+
+    {% if appointments %}
+
+        {% for appointment in appointments %}
+
+            <h3>
+                Doctor: {{ appointment.doctor.user.username }}
+            </h3>
+
+            <p>
+                Specialization:
+                {{ appointment.doctor.specialization }}
+            </p>
+
+            <p>
+                Date:
+                {{ appointment.appointment_date }}
+            </p>
+
+            <p>
+                Time:
+                {{ appointment.appointment_time }}
+            </p>
+
+            <p>
+                Reason:
+                {{ appointment.reason }}
+            </p>
+
+            <p>
+                Status:
+                {{ appointment.status }}
+            </p>
+
+            {% if appointment.status == "PENDING" %}
+
+                <form
+                    method="post"
+                    action="{% url 'cancel_appointment' appointment.id %}"
+                >
+                    {% csrf_token %}
+
+                    <button type="submit">
+                        Cancel Appointment
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>You have no appointments yet.</p>
+
+    {% endif %}
+
+</body>
+
+</html>
